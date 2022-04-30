@@ -115,7 +115,7 @@ int main() { //TODO fix up the main function
       // 11pm through 1am
     }
 
-    if (QQ -> order)
+    if (QQ -> order) //TODO figure out how to read the time in a customer to knwo when to fulfill order.
 
 
     // 2. is a customer going to place an order this minute?
@@ -124,15 +124,3 @@ int main() { //TODO fix up the main function
     TIME++;
   }
 }
-/*
-  60% ->  regular questions
-
-  Traversals
-  BSTs vs HT vs Linear
-  Sorting: HEAP or Quick or Merge
-  HTs: Show table with collision avoidance
-
-  40% -> BSTs
-
-  3-4 new functions
-*/

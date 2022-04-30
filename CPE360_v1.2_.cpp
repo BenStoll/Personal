@@ -3,10 +3,6 @@
 #include <iostream>
 using namespace std;
 
-void customerArrival(int generatorIn, int timeIn) {
-  generatorIn = rand() % 6 + 1;
-  cout << "New customer arrived at time: " << timeIn << endl;
-}
 class Customer {
  public:
   int in_time;          //time that you get into the store
@@ -23,37 +19,63 @@ class Queue {
 
   Queue() { 
     head = NULL;
-
+    size = 0;
   }
 
-  void enqueue(int value) {
+  //TODO reconcile the enqueue and customer arrival + rename dequeue?
+  /*
+  void customerArrival(int generatorIn, int timeIn) {
+    generatorIn = rand() % 6 + 1;
+    cout << "New customer arrived at time: " << timeIn << endl;
+  }
+  */
+
+  void enqueue(int time, int order) {
     Customer *temp = new Customer;
-    temp->value = value;
+    temp->in_time = time;
+    temp->order_len = order;
+
     if (head == NULL) {
       head = temp;
-    } else {
+    } 
+    
+    else {
       temp->next = head;
       head = temp;
     }
   }
 
-  void dequeue() {
+  void dequeue(int cur_time, int wait_time) {
+
+    //Empty Queue - should not be touched at all but just in case.
     if (head == NULL) {
-      cout << "Nothing to remove. Try a different function please." << endl;
-    } else if (head->next = NULL) {
-      cout << "Deleting the head of the Queue with value: " << head->value
-           << endl;
-      delete head;
+      cout << "Line is empty. Lets wait and see if some customers show up." << endl;
+    } 
+    
+    //One item in the queue
+    else if (head->next = NULL) {
+      head->out_time = cur_time;
+      cout << "Another order fulfilled! They waited: "
+           << (head->in_time) - (head->out_time) << endl;
+      delete head;//TODO add in the summation of the times waited in line and total time waited
       head = NULL;
-    } else {
+    } 
+    
+
+    else {
       Customer *chase, *follow;
       follow = chase = head;
+
       while (chase->next != NULL) {
         follow = chase;
         chase = follow->next;
       }
-      cout << "Deleting the variable 'chase' with value: " << chase->value
-           << endl;
+      chase -> out_time = cur_time;
+      chase->next -> order_len = wait_time;//TODO same thing, add in summation of time waited in line and overall
+
+      cout << "Another Order fulfilled! They waited: "
+           << (chase->in_time) - (cur_time) << "Next customer in line!" << endl;
+
       follow->next = NULL;
       delete chase;
     }
@@ -61,7 +83,7 @@ class Queue {
 };
 
 
-int main() {
+int main() { //TODO fix up the main function
   int TIME = 0, generator;
   int cumulitive_time = 0;
   int customer_count = 0;

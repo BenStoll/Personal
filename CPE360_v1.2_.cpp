@@ -9,6 +9,13 @@ class Customer {
   int out_time;         //time that you leave the store
   int order_time;       //time spent in queue
   int order_len;        //amount to time for order to be processed (1-6)
+  Customer *next;
+
+  Customer() { 
+    in_time = 0;
+    out_time = order_time = order_len = 0;
+    next = NULL;
+   }
 };
 
 
@@ -45,7 +52,7 @@ class Queue {
     }
   }
 
-  void dequeue(int cur_time, int wait_time) {
+  void dequeue(int cur_time/*, int wait_time*/) {
 
     //Empty Queue - should not be touched at all but just in case.
     if (head == NULL) {
@@ -71,7 +78,8 @@ class Queue {
         chase = follow->next;
       }
       chase -> out_time = cur_time;
-      chase->next -> order_len = wait_time;//TODO same thing, add in summation of time waited in line and overall
+      //chase->next -> order_len = wait_time;           I am not sure what I was going for with this for right now.
+      //TODO same thing, add in summation of time waited in line and overall
 
       cout << "Another Order fulfilled! They waited: "
            << (chase->in_time) - (cur_time) << "Next customer in line!" << endl;
@@ -80,14 +88,33 @@ class Queue {
       delete chase;
     }
   }
+
+  void tickDown(int cur_time){
+    Customer *temp = head;
+    while (temp != NULL) {
+      temp = temp->next;
+    }
+
+    if (temp->order_len == 0) {  // TODO figure out how to read the time in a customer to know when to fulfill order. - Maybe fixed? double check
+      dequeue(cur_time);      //This looks slightly weird. Any thoughts?
+    }
+    else {
+      temp->order_len -= 1;
+    }
+  }
 };
 
 
+
+
 int main() { //TODO fix up the main function
+  Queue QQ;
   int TIME = 0, generator;
   int cumulitive_time = 0;
   int customer_count = 0;
   // as many variables as you need
+
+
   srand(time(NULL));
 
   // store hours, every minute of that day
@@ -97,30 +124,58 @@ int main() { //TODO fix up the main function
       // 8am through 10am
       generator = rand() % 100 + 1;
       if (generator <= 30) {
-        customerArrival(generator, TIME);
-        // Q.enqueue(TIME,generator);
+        //customerArrival(generator, TIME); //TODO see above (enqueue)
+        QQ.enqueue(TIME, generator);
       }
 
-    } else if (TIME > 120 && TIME <= 210) {
+    } 
+    else if (TIME > 120 && TIME <= 210) {
       // 10am through 11:30am
-    } else if (TIME > 210 && TIME <= 330) {
+      generator = rand() % 100 + 1;
+      if (generator <= 10){
+        QQ.enqueue(TIME, generator);
+      }
+    } 
+    else if (TIME > 210 && TIME <= 330) {
       // 11:30am through 1:30pm
-    } else if (TIME > 330 && TIME <= 570) {
+      generator = rand() % 100 + 1;
+      if (generator <= 40) {
+        QQ.enqueue(TIME, generator);
+      }
+    } 
+    else if (TIME > 330 && TIME <= 570) {
       // 1:30pm through 5:30pm
-    } else if (TIME > 570 && TIME <= 720) {
+      generator = rand() % 100 + 1;
+      if (generator <= 10) {
+        QQ.enqueue(TIME, generator);
+      }
+    } 
+    else if (TIME > 570 && TIME <= 720) {
       // 5:30pm through 8:00pm
-    } else if (TIME > 720 && TIME <= 900) {
+      generator = rand() % 100 + 1;
+      if (generator <= 25) {
+        QQ.enqueue(TIME, generator);
+      }
+    } 
+    else if (TIME > 720 && TIME <= 900) {
       // 8:00pm through 11pm
-    } else if (TIME > 900 && TIME <= 1020) {
+      generator = rand() % 100 + 1;
+      if (generator <= 20) {
+        QQ.enqueue(TIME, generator);
+      }
+    } 
+    else if (TIME > 900 && TIME <= 1020) {
       // 11pm through 1am
+      generator = rand() % 100 + 1;
+      if (generator <= 10) {
+        QQ.enqueue(TIME, generator);
+      }
     }
-
-    if (QQ -> order) //TODO figure out how to read the time in a customer to knwo when to fulfill order.
-
 
     // 2. is a customer going to place an order this minute?
     //int order_time = rand() % 6 + 1;
     // 3. is a customer ready to depart the store at this minute?
+    QQ.tickDown(TIME);
     TIME++;
   }
 }

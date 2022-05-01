@@ -29,7 +29,7 @@ class Queue {
     size = 0;
   }
 
-  //TODO reconcile the enqueue and customer arrival + rename dequeue?
+  // reconcile the enqueue and customer arrival + rename dequeue? - done
   /*
   void customerArrival(int generatorIn, int timeIn) {
     generatorIn = rand() % 6 + 1;
@@ -37,7 +37,9 @@ class Queue {
   }
   */
 
-  void enqueue(int time, int order) {
+  void enqueue(int time) {
+    cout << "A new customer arrives in the queue at tick: " << time << "\n";
+    int order = rand() % 6 + 1;
     Customer *temp = new Customer;
     temp->in_time = time;
     temp->order_len = order;
@@ -125,7 +127,8 @@ int main() { //TODO fix up the main function
       generator = rand() % 100 + 1;
       if (generator <= 30) {
         //customerArrival(generator, TIME); //TODO see above (enqueue)
-        QQ.enqueue(TIME, generator);
+
+        QQ.enqueue(TIME);
       }
 
     } 
@@ -133,42 +136,42 @@ int main() { //TODO fix up the main function
       // 10am through 11:30am
       generator = rand() % 100 + 1;
       if (generator <= 10){
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     } 
     else if (TIME > 210 && TIME <= 330) {
       // 11:30am through 1:30pm
       generator = rand() % 100 + 1;
       if (generator <= 40) {
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     } 
     else if (TIME > 330 && TIME <= 570) {
       // 1:30pm through 5:30pm
       generator = rand() % 100 + 1;
       if (generator <= 10) {
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     } 
     else if (TIME > 570 && TIME <= 720) {
       // 5:30pm through 8:00pm
       generator = rand() % 100 + 1;
       if (generator <= 25) {
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     } 
     else if (TIME > 720 && TIME <= 900) {
       // 8:00pm through 11pm
       generator = rand() % 100 + 1;
       if (generator <= 20) {
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     } 
     else if (TIME > 900 && TIME <= 1020) {
       // 11pm through 1am
       generator = rand() % 100 + 1;
       if (generator <= 10) {
-        QQ.enqueue(TIME, generator);
+        QQ.enqueue(TIME);
       }
     }
 

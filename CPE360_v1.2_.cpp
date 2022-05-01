@@ -2,6 +2,11 @@
 #include <time.h>
 #include <iostream>
 using namespace std;
+//We don't have a solution to avg queue size just yet if you want to take a look at it.
+//Additionally, we need to start looking at the optimzation code and see how we can run two people at a time. This could be done by calling the tickDown function
+//and removing from the class and make it accept a pointer to the queue we want to adjust? Or we could simply dupe and 
+//adjust that funciton to call it but not go all the way down the string...
+
 
 class Customer {
  public:
@@ -9,7 +14,7 @@ class Customer {
   int out_time;         //time that you leave the store
   int order_time;       //time spent in queue
   int order_len;        //amount to time for order to be processed (1-6)
-  Customer *next;
+  Customer *next;       //Next customer behind 
 
   Customer() { 
     in_time = 0;
@@ -80,7 +85,9 @@ class Queue {
         chase = follow->next;
       }
       chase -> out_time = cur_time;
-      //chase->next -> order_len = wait_time;           I am not sure what I was going for with this for right now.
+      follow -> order_len = follow->in_time - cur_time;           //I think this works to say how much the next customer waits in line
+      //, but I would like a second opinion. I don't think that this works for the first and last customers though.
+
       //TODO same thing, add in summation of time waited in line and overall
 
       cout << "Another Order fulfilled! They waited: "
@@ -98,7 +105,7 @@ class Queue {
     }
 
     if (temp->order_len == 0) {  // TODO figure out how to read the time in a customer to know when to fulfill order. - Maybe fixed? double check
-      dequeue(cur_time);      //This looks slightly weird. Any thoughts?
+      dequeue(cur_time);      
     }
     else {
       temp->order_len -= 1;

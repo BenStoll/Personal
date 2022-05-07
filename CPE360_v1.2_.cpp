@@ -44,7 +44,6 @@ class Queue {
   */
 
   void enqueue(int time) {
-
     cout << "A new customer arrives in the queue at tick: " << time << "\n";
     int order = rand() % 6 + 1;
     Customer *temp = new Customer;
@@ -95,7 +94,7 @@ class Queue {
       //TODO same thing, add in summation of time waited in line and overall
 
       cout << "Another Order fulfilled! They waited: "
-           << (chase->in_time) - (cur_time) << "Next customer in line!" << endl;
+           << (chase -> in_time) - (cur_time) << "Next customer in line!" << endl;
 
       follow->next = NULL;
       delete chase;
@@ -103,23 +102,28 @@ class Queue {
     }
   }
 
-/*
-  void tickDown(int cur_time, int customer_count){
-    Customer *temp = head;
-    while (temp != NULL) {
-      temp = temp->next;
+  void tickDown(int cur_time){
+    Customer *temp;
+    temp = head;
+    if (temp == NULL){
+      return;
     }
+    else{
+      while (temp->next != NULL) {
+        temp = temp->next;
+      }
 
-    if (temp->order_len == 0) {  // TODO figure out how to read the time in a customer to know when to fulfill order. - Maybe fixed? double check
-      dequeue(cur_time);
-      customer_count -= 1;
+      if (temp -> order_len == 0) {  //Seg Fault here?? 
+      // TODO figure out how to read the time in a customer to know when to fulfill order. - Maybe fixed? double check
+        dequeue(cur_time);
+        cout << "Removing a customer from the line. Get out." << endl;
+      }
+      else {
+        temp->order_len -= 1;
+      }
+      //return customer_count;
     }
-    else {
-      temp->order_len -= 1;
-    }
-    return customer_count;
   }
-  */
 };
 
 
@@ -145,7 +149,6 @@ int main() { //TODO fix up the main function - What is needed? -
         QQ.enqueue(TIME);
         customer_count += 1;
       }
-
     } 
 
     else if (TIME > 120 && TIME <= 210) {
@@ -205,9 +208,9 @@ int main() { //TODO fix up the main function - What is needed? -
     // 2. is a customer going to place an order this minute?
     //int order_time = rand() % 6 + 1;
     // 3. is a customer ready to depart the store at this minute?
-    //QQ.tickDown(TIME, customer_count);
+    QQ.tickDown(TIME);
 
-    
+/*    
     Customer *temp = head;
     while (temp ->next != NULL){
 
@@ -219,7 +222,7 @@ int main() { //TODO fix up the main function - What is needed? -
     } else {
       temp -> order_len -= 1;
     }
-  }
-
+    */
     TIME++;
+  }
 }

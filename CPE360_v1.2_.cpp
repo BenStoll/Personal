@@ -2,17 +2,21 @@
 #include <time.h>
 #include <iostream>
 using namespace std;
-//We don't have a solution to avg queue size just yet if you want to take a look at it.
-
-//Additionally, we need to start looking at the optimzation code and see how we can run two people at a time. This could be done by calling the tickDown function
-//and removing from the class and make it accept a pointer to the queue we want to adjust? Or we could simply dupe and 
-//adjust that funciton to call it but not go all the way down the string...
+// We don't have a solution to avg queue size just yet if you want to take a
+// look at it. 
+//srand(time(NULL)); 
+//This might be useful after debugging and etc. 
+//Additionally, we need to start looking at the
+// optimzation code and see how we can run two people at a time. This could be
+// done by calling the tickDown function and removing from the class and make it
+// accept a pointer to the queue we want to adjust? Or we could simply dupe and
+// adjust that funciton to call it but not go all the way down the string...
 
 class Customer {
  public:
   int in_time;          //time that you get into the store
   int out_time;         //time that you leave the store
-  int order_time;       //time spent in queue
+  int order_time;       //time spent in queue (out_time - in_time - order_len)
   int order_len;        //amount to time for order to be processed (1-6)
   Customer *next;       //Next customer behind 
 
@@ -49,6 +53,7 @@ class Queue {
     Customer *temp = new Customer;
     temp->in_time = time;
     temp->order_len = order;
+    cout << "The order length is: " << order << "\n\n";
 
     if (head == NULL) {
       head = temp;
@@ -61,6 +66,8 @@ class Queue {
   }
 
   void dequeue(int cur_time) {
+    //The dequeue function is messed up some how. It removed the first node instead of the last node?
+
     //Empty Queue - should not be touched at all but just in case.
     if (head == NULL) {
       cout << "Line is empty. Lets wait and see if some customers show up." << endl;
@@ -84,17 +91,20 @@ class Queue {
 
       while (chase->next != NULL) {
         follow = chase;
-        chase = follow->next;
+        chase = chase -> next;
       }
 
       chase -> out_time = cur_time;
-      follow -> order_len = follow->in_time - cur_time;           //I think this works to say how much the next customer waits in line
-      //, but I would like a second opinion. I don't think that this works for the first and last customers though.
+      follow -> order_time = chase->in_time - cur_time;           //I think this works to say how much the next customer waits in line
+      //, but I would like a second opinion. I don't think that this works for the first customer though.
 
       //TODO same thing, add in summation of time waited in line and overall
+      cout << "Out: " <<chase->out_time << " In: "<< chase->in_time << " Length: " << chase->order_len << " order time: "
+           << chase->order_time << " current time: " << cur_time << endl;
 
       cout << "Another Order fulfilled! They waited: "
-           << (chase -> in_time) - (cur_time) << "Next customer in line!" << endl;
+           << (cur_time) - (chase->in_time) << ". Next customer in line!"
+           << endl;
 
       follow->next = NULL;
       delete chase;
@@ -113,7 +123,7 @@ class Queue {
         temp = temp->next;
       }
 
-      if (temp -> order_len == 0) {  //Seg Fault here?? 
+      if (temp -> order_len == 0) {
       // TODO figure out how to read the time in a customer to know when to fulfill order. - Maybe fixed? double check
         dequeue(cur_time);
         cout << "Removing a customer from the line. Get out." << endl;
@@ -147,7 +157,7 @@ int main() { //TODO fix up the main function - What is needed? -
       if (generator <= 30) {
         //customerArrival(generator, TIME); //TODO see above (enqueue)
         QQ.enqueue(TIME);
-        customer_count += 1;
+        //customer_count += 1;
       }
     } 
 

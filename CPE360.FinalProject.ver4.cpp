@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <time.h>
-
 #include <iostream>
 using namespace std;
 
-int currentNumCustomers = 0;
 
+int currentNumCustomers = 0;
 int totalWaitTime = 0;
 int totalServiceTime = 0;
 int totalQueueLength = 0;
@@ -14,6 +13,7 @@ int totalNumCustomers = 0;
 // Tracker is for part 2.1, tracking metrics.  Current issue is initializing
 // best times - if we intialize at 0, that complicates matters - maybe
 // initialize at super high number, NULL, INF, or first customer?
+    //You could initialize at 3/4 because it is the middle and will never be the worst/best?
 
 // This is used to track best and worst case scenarios.  Updated when an if
 // statement goes through
@@ -53,8 +53,8 @@ class Customer {
   Customer() {
     in_time = 0;
     out_time = 0;
-    order_time = 0;
-    order_time_left = 0;
+    order_time;
+    order_time_left;
     atRegister = false;
 
     next = NULL;
@@ -116,7 +116,8 @@ class Queue {
     Customer *nextCustomer = new Customer;
     nextCustomer->in_time = time;
     nextCustomer->order_time = nextCustomer->order_time_left = rand() % 6 + 1;
-    cout << "The order length is: " << nextCustomer->order_time << "\n\n";
+    cout << "The order length is: " << nextCustomer->order_time << "\n";
+
 
     // update currentOrderTimeLeft for empty scenarios
     if (head == NULL) {
@@ -136,6 +137,8 @@ class Queue {
     // update counters
     currentNumCustomers++;
     totalNumCustomers++;
+    cout << "The Queue Length is currently: " << currentNumCustomers << endl;
+    //cout << "The Total Num of cust is : " << totalNumCustomers << "\n\n";
   }
 
   void dequeue(int cur_time) {
@@ -159,6 +162,7 @@ class Queue {
       head = NULL;
       if (bestQueue->length > 1)
         updateQTracker(bestQueue, 1, cur_time);  // maybe it'll never hit 0?
+      currentNumCustomers--;
       return;
     }
 
@@ -172,12 +176,13 @@ class Queue {
       }
 
       chase->out_time = cur_time;
+/* I hate how much this clutters the terminal
 
       cout << "Out: " << chase->out_time << " In: " << chase->in_time
            << " Length: " << chase->order_time
            << " order input time: " << cur_time - chase->order_time
            << " current time: " << cur_time << endl;
-
+*/
       cout << "Another Order fulfilled! They waited: "
            << (cur_time) - (chase->in_time) << ". Next customer in line!"
            << endl;
@@ -343,5 +348,6 @@ int main() {  // TODO fix up the main function - What is needed? -
     }
   }
 
-  cout << "How did I get here?" << endl;
+  cout << "How did I get here?\n" 
+  << "Where? The end of the program? Or are you talking about in life?" << endl;
 }

@@ -193,6 +193,7 @@ class Queue {
 
       follow->next = chase->next;
       delete chase;
+      /*
       Customer *after, *before;
       after = before = head;
 
@@ -226,7 +227,7 @@ class Queue {
         before->next = after-> next;
         delete after;
       }
-
+*/
       currentNumCustomers--;
       
       if (worstQueue->length < currentNumCustomers)
@@ -242,7 +243,19 @@ class Queue {
     chase = follow = head;
     if (chase == NULL) {
       return;
-    } else {
+    } 
+
+    else if (chase-> next == NULL){
+      if (chase->order_time == 0){
+        dequeue(cur_time);
+      }
+      else {
+        chase->order_time -= 1;
+      }
+      return;
+    }
+
+    else {
       while (chase->next != NULL) {
         chase = follow;
         chase = chase->next;
@@ -262,6 +275,7 @@ class Queue {
       } else {
         follow->order_time -= 1;
       }
+      return;
     }
   }
 };

@@ -161,8 +161,6 @@ class Queue {
       Customer *chase, *follow;
       follow = chase = head;
 
-      Customer *after, *before;
-      after = before = head;
       {
       while (chase->order_time != 0) {
         follow = chase;
@@ -192,8 +190,11 @@ class Queue {
           (chase->out_time - chase->in_time + chase->order_time);
 
       //currentOrderTimeLeft = follow->order_time;
-      follow->next = NULL;
+
+      follow->next = chase->next;
       delete chase;
+      Customer *after, *before;
+      after = before = head;
 
       {//Desk 2
       while (after->order_time != 0) {
@@ -204,8 +205,6 @@ class Queue {
           return;
         }
       }
-
-      
         after->out_time = cur_time;
 
         cout << "Out: " << after->out_time << " In: " << after->in_time
@@ -224,7 +223,7 @@ class Queue {
             (after->out_time - after->in_time + after->order_time);
 
         // currentOrderTimeLeft = follow->order_time;
-        follow->next = NULL;
+        before->next = after-> next;
         delete after;
       }
 

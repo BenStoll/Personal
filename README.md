@@ -74,3 +74,5 @@ The customer then picks the queue with lesser customers in it and joins the line
 
 For both these alternatives, calculate the parameters of interest: (i) average wait time, (ii)
 service time, and (iii) queue length. Suggest which alternative works better, and why?
+  
+   The single queue with two registers is better as it tends to be slightly fast due to the fact that customers can cause the lines to become unbalanced if there are      two separate lines. Additonally, it makes it easier to code because there is one queue and you just need to work around that. 

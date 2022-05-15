@@ -6,9 +6,9 @@ We pledge our Honor that we have abided by the Stevens Honor System
 */
 #include <stdlib.h>
 #include <time.h>
+
 #include <iostream>
 using namespace std;
-
 
 int currentNumCustomers = 0;
 int totalWaitTime = 0;
@@ -116,7 +116,6 @@ class Queue {
     nextCustomer->in_time = time;
     nextCustomer->order_time = nextCustomer->order_time_left = rand() % 6 + 1;
     cout << "The order length is: " << nextCustomer->order_time << "\n";
-
 
     // update currentOrderTimeLeft for empty scenarios
     if (head == NULL) {
@@ -310,6 +309,13 @@ int main() {  // TODO fix up the main function - What is needed? -
 
     TIME++;
 
+    // initialize best case scenario
+    if (totalNumCustomers == 1 && QQ.head != NULL) {
+      bestWait->length = bestService->length = QQ.head->order_time;
+      bestWait->start = bestService->start = QQ.head->in_time;
+      bestWait->end = bestService->end = QQ.head->in_time + QQ.head->order_time;
+    }
+
     // end of day results, this prints out what 2.1 - "How good is the current
     // system?" asks for
     if (TIME >= 1020) {
@@ -323,7 +329,8 @@ int main() {  // TODO fix up the main function - What is needed? -
       cout << "Average customer service time is: "
            << totalServiceTime / totalNumCustomers << "\n\n";
 
-      cout << "Average queue length is: " << totalQueueLength / 1020.0 << "\n\n";
+      cout << "Average queue length is: " << totalQueueLength / 1020.0
+           << "\n\n";
 
       displayTrackerValues(bestWait, "best", "time");
       displayTrackerValues(worstWait, "worst", "time");

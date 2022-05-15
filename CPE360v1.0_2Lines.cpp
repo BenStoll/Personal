@@ -128,7 +128,6 @@ class Queue {
     else if (head->next == NULL) {
       nextCustomer->next = head;
       head = nextCustomer;
-      head->atRegister = true;
     } else {
       nextCustomer->next = head;
       head = nextCustomer;
@@ -156,8 +155,8 @@ class Queue {
       if (bestQueue->length > 0)
         updateQTracker(bestQueue, 0,
                        cur_time);  // you're not getting better than 0
-      return;
       */
+      return;
     }
 
     // One item in the queue
@@ -222,10 +221,8 @@ class Queue {
              << " is currently: " << lineSize2 << endl;
       }
 
-      if (worstQueue->length < lineSize1)
-        updateQTracker(worstQueue, lineSize1, cur_time);
-      if (worstQueue->length < lineSize2)
-        updateQTracker(worstQueue, lineSize2, cur_time);
+      if (worstQueue->length < lineSize1 + lineSize2)
+        updateQTracker(worstQueue, lineSize1 + lineSize2, cur_time);
 
       return;
     }
@@ -233,7 +230,6 @@ class Queue {
 
   void tickDown(int time, int lineNumber) {
     if (head == NULL) return;
-
     Customer *chase, *follow;
     follow = chase = head;
     while (chase->next != NULL) {
@@ -259,7 +255,7 @@ void displayTrackerValues(Tracker *tracking, string BoW, string SoT) {
        << tracking->type << " end time: " << tracking->end << "\n\n";
 }
 
-void chooseShorterLine(Queue line1, Queue line2, int time) {
+void chooseShorterLine(Queue &line1, Queue &line2, int time) {
   if (lineSize1 <= lineSize2)
     line1.enqueue(time, 1);
   else
@@ -350,12 +346,14 @@ int main() {  // TODO fix up the main function - What is needed? -
 
     TIME++;
 
+    // initialize best case scenario
     if (totalNumCustomers == 1 && QQ1.head != NULL) {
       bestWait->length = bestService->length = QQ1.head->order_time;
       bestWait->start = bestService->start = QQ1.head->in_time;
       bestWait->end = bestService->end =
           QQ1.head->in_time + QQ1.head->order_time;
     }
+
     // end of day results, this prints out what 2.1 - "How good is the current
     // system?" asks for
     if (TIME >= 1020) {
@@ -370,7 +368,7 @@ int main() {  // TODO fix up the main function - What is needed? -
            << totalServiceTime / totalNumCustomers << "\n\n";
 
       cout << "Average queue length is: "
-           << (totalQueueLength1 + totalQueueLength2) / 2 / 1020.0 << "\n\n";
+           << (totalQueueLength1 + totalQueueLength2) / 1020.0 << "\n\n";
 
       displayTrackerValues(bestWait, "best", "time");
       displayTrackerValues(worstWait, "worst", "time");

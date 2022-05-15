@@ -84,8 +84,8 @@ void updateQTracker(Tracker *tracking, int newLength, int time) {
 // update wait / service total times and check trackers
 void updateWSTimes(Customer *current) {
   // current wait and service times
-  int currentWaitTime = current->out_time - current->in_time;
-  int currentServiceTime = currentWaitTime + current->order_time;
+  int currentServiceTime = current->out_time - current->in_time;
+  int currentWaitTime = currentServiceTime - current->order_time;
 
   // update total counters
   totalWaitTime += currentWaitTime;
@@ -179,10 +179,6 @@ class Queue {
 
       updateWSTimes(chase);
 
-      totalWaitTime += (chase->out_time - chase->in_time);
-      totalServiceTime +=
-          (chase->out_time - chase->in_time + chase->order_time);
-
       if (chase->next == NULL)
         follow->next = NULL;
       else if (chase == head)
@@ -216,9 +212,8 @@ class Queue {
       chase = chase->next;
     }
     chase->order_time_left--;
-    // cout << "TIME " << chase->in_time << " order at " <<
-    // chase->order_time_left
-    //      << endl;
+    cout << "TIME " << chase->in_time << " order at " << chase->order_time_left
+         << endl;
     if (chase->order_time_left == 0) dequeue(time);
   }
 };
@@ -309,9 +304,13 @@ int main() {  // TODO fix up the main function - What is needed? -
 
     TIME++;
 
+    // cout << "Current TIME: " << TIME << endl;
+    // cin.ignore();
+
     // initialize best case scenario
     if (totalNumCustomers == 1 && QQ.head != NULL) {
-      bestWait->length = bestService->length = QQ.head->order_time;
+      bestWait->length = 0;
+      bestService->length = QQ.head->order_time;
       bestWait->start = bestService->start = QQ.head->in_time;
       bestWait->end = bestService->end = QQ.head->in_time + QQ.head->order_time;
     }
@@ -322,6 +321,8 @@ int main() {  // TODO fix up the main function - What is needed? -
       cout << "Oh my lord, thank goodness it's closing time. Let's see how we "
               "did."
            << endl;
+
+      cout << "Total Number of Customers is: " << totalNumCustomers << "\n\n";
 
       cout << "Average customer wait time is: "
            << totalWaitTime / totalNumCustomers << "\n\n";

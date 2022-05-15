@@ -224,6 +224,7 @@ class Queue {
 
   void tickDown(int time, int lineNumber) {
     if (head == NULL) return;
+
     Customer *chase, *follow;
     follow = chase = head;
     while (chase->next != NULL) {
@@ -361,10 +362,10 @@ int main() {  // TODO fix up the main function - What is needed? -
       cout << "Total Number of Customers is: " << totalNumCustomers << "\n\n";
 
       cout << "Average customer wait time is: "
-           << totalWaitTime / totalNumCustomers << "\n\n";
+           << totalWaitTime * 1.0 / totalNumCustomers << "\n\n";
 
       cout << "Average customer service time is: "
-           << totalServiceTime / totalNumCustomers << "\n\n";
+           << totalServiceTime * 1.0 / totalNumCustomers << "\n\n";
 
       cout << "Average queue length is: "
            << (totalQueueLength1 + totalQueueLength2) / 1020.0 << "\n\n";

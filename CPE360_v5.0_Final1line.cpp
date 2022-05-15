@@ -164,10 +164,11 @@ class Queue {
     }
 
     else {
-      Customer *chase, *follow;
-      follow = chase = head;
+      Customer *chase, *follow, *follow2;
+      follow2 = follow = chase = head;
 
       while (chase->order_time_left != 0) {
+        follow2 = follow;
         follow = chase;
         chase = chase->next;
       }
@@ -179,9 +180,10 @@ class Queue {
 
       updateWSTimes(chase);
 
-      if (chase->next == NULL)
+      if (chase->next == NULL) {
+        follow2->atRegister = true;
         follow->next = NULL;
-      else if (chase == head)
+      } else if (chase == head)
         head = head->next;
       else if (chase->next != NULL) {
         follow->next = chase->next;
@@ -206,6 +208,8 @@ class Queue {
     while (chase->next != NULL) {
       if (chase->atRegister) {
         chase->order_time_left--;
+        cout << "TIME " << chase->in_time << " order at "
+             << chase->order_time_left << endl;
         if (chase->order_time_left == 0) dequeue(time);
       }
       follow = chase;
@@ -325,10 +329,10 @@ int main() {  // TODO fix up the main function - What is needed? -
       cout << "Total Number of Customers is: " << totalNumCustomers << "\n\n";
 
       cout << "Average customer wait time is: "
-           << totalWaitTime / totalNumCustomers << "\n\n";
+           << totalWaitTime * 1.0 / totalNumCustomers << "\n\n";
 
       cout << "Average customer service time is: "
-           << totalServiceTime / totalNumCustomers << "\n\n";
+           << totalServiceTime * 1.0 / totalNumCustomers << "\n\n";
 
       cout << "Average queue length is: " << totalQueueLength / 1020.0
            << "\n\n";

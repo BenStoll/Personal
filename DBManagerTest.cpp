@@ -1,0 +1,1 @@
+//Creating a database manager that can automatically rectify duplicate entries and merge information. also means storing the information in a clean manner. 
